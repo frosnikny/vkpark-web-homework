@@ -1,0 +1,22 @@
+{% extends 'inc/base.html' %}
+{% load static %}
+
+{% block content %}
+    {% include 'inc/question_item.html' with question_type="own-question"%}
+
+    <hr/>
+
+    {% for answer in question.answers %}
+        {% include 'inc/answer_item.html' %}
+    {% endfor %}
+
+    <hr class="mt-5"/>
+
+    <div class="new-answer row col-11">
+        <label class="visually-hidden" for="NewQuestionText">New answer for the question</label>
+        <textarea class="form-control" id="NewQuestionText" rows="6" placeholder="Your answer"></textarea>
+        <div class="new-answer mt-3 mb-3">
+            <button class="btn btn-outline-dark btn-sm" type="submit">Answer</button>
+        </div>
+    </div>
+{% endblock %}

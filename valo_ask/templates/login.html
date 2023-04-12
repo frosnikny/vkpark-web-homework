@@ -1,0 +1,23 @@
+{% extends 'inc/base.html' %}
+
+{% block content %}
+    <div class="col-11">
+        <h1>Log In</h1>
+        <hr/>
+        <form>
+            <label class="link-danger text-wrong-password">Sorry, wrong password!</label>
+            <div class="mb-3 row">
+                <label for="login" class="form-label">Login</label>
+                <input type="text" class="form-control" id="login" placeholder="Enter your login here">
+            </div>
+            <div class="mb-3 row">
+                <label for="password" class="form-label">Password</label>
+                <input type="password" class="form-control" id="password"
+                       placeholder="Enter your password here">
+            </div>
+            <button type="submit" class="btn btn-outline-dark btn-sm btn-form-submit mb-4 mt-2">Log in
+            </button>
+        </form>
+        <a href="{% url "signup" %}">Create new account</a>
+    </div>
+{% endblock %}
