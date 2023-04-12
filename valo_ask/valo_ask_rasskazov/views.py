@@ -15,8 +15,6 @@ def paginate(objects_list, request, per_page=10):
 
 def index(request):
     questions = models.Question.objects.with_new()
-    # questions = list(models.Question.objects.all())
-    # questions.reverse()
     page_obj = paginate(questions, request, 5)
     context = {
         'questions': questions[page_obj.start_index() - 1: page_obj.end_index()],
@@ -49,9 +47,15 @@ def index_tag(request, tag):
 
 
 def question(request, question_id):
-    if question_id >= len(models.QUESTIONS):
+    # if question_id >= len(models.Question.objects.all()):
+    #     raise Http404
+    our_question = models.Question.objects.filter(id=question_id)
+    if not our_question:
         raise Http404
-    context = {'question': models.QUESTIONS[question_id]}
+    our_question = our_question.first()
+    answers = models.Answer.objects.with_question(question_id)
+    context = {'question': our_question,
+               'answers': answers}
     return render(request, 'question.html', context=context)
 
 

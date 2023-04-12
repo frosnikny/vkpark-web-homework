@@ -3,20 +3,36 @@ from django.contrib.auth import models as user_models
 
 
 class QuestionManager(models.Manager):
+    last_update = 0
+    update_need = 100
+
     def update_all(self):
         for i in super().get_queryset().all():
             i.update_average_rating()
 
     def with_rating_order(self):
-        self.update_all()
-        return super().get_queryset().order_by('-summary_rating')
+        questions = super().get_queryset()
+        all_length = len(questions.all())
+        if all_length > QuestionManager.last_update + QuestionManager.update_need:
+            QuestionManager.last_update = all_length
+            self.update_all()
+        return questions.order_by('-summary_rating')
 
     def with_tag(self, tag):
-        # questions = self.filter()
-        return self.get_queryset().filter(tag__name=tag)
+        questions = super().get_queryset()
+        all_length = len(questions.all())
+        if all_length > QuestionManager.last_update + QuestionManager.update_need:
+            QuestionManager.last_update = all_length
+            self.update_all()
+        return questions.filter(tag__name=tag)
 
     def with_new(self):
-        return super().get_queryset().order_by('-id')
+        questions = super().get_queryset()
+        all_length = len(questions.all())
+        if all_length > QuestionManager.last_update + QuestionManager.update_need:
+            QuestionManager.last_update = all_length
+            self.update_all()
+        return questions.order_by('-id')
 
     def get_queryset(self):
         return super().get_queryset()
@@ -28,8 +44,18 @@ class UserManager(models.Manager):
 
 
 class RatingsManager(models.Manager):
-    def test(self, q):
-        return super().get_queryset().filter(question=q)
+    def get_queryset(self):
+        return super().get_queryset()
+
+
+class AnswerManager(models.Manager):
+    def with_question(self, question_id):
+        answers = super().get_queryset()
+        # all_length = len(answers.all())
+        # if all_length > QuestionManager.last_update + QuestionManager.update_need:
+        #     QuestionManager.last_update = all_length
+        #     self.update_all()
+        return self.get_queryset().filter(question_id=question_id)
 
     def get_queryset(self):
         return super().get_queryset()
@@ -70,6 +96,8 @@ class Answer(models.Model):
     text = models.CharField(max_length=255, default='answer text')
     question = models.ForeignKey('Question', on_delete=models.CASCADE)
     creator = models.ForeignKey('User', on_delete=models.SET_NULL, null=True)
+
+    objects = AnswerManager()
 
 
 class Tag(models.Model):
