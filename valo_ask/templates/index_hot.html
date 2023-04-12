@@ -1,11 +1,5 @@
-{% extends 'inc/base.html' %}
+{% extends 'inc/base_index.html' %}
 
-{% block content %}
+{% block content-index %}
     <h2 class="mt-2">Hot Questions</h2>
-
-    {% for question in questions %}
-        {% include 'inc/question_item.html' with question_type="question" %}
-    {% endfor %}
-
-    {% include 'inc/pagination.html' %}
 {% endblock %}

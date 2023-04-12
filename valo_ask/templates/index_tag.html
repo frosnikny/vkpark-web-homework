@@ -1,16 +1,8 @@
-{% extends 'inc/base.html' %}
-{% load static %}
+{% extends 'inc/base_index.html' %}
 
-{% block content %}
+{% block content-index %}
     <div class="tag-head d-flex">
         <h2 class="mt-2">Tag: {{ tag }}</h2>
         <a class="btn-tag-clear btn btn-outline-dark btn-sm h-25 m-lg-3" href="{% url "index" %}">Clear</a>
     </div>
-
-    {% for question in questions %}
-        {% include 'inc/question_item.html' with question_type="question" %}
-    {% endfor %}
-
-    {% include 'inc/pagination.html' %}
-
 {% endblock %}

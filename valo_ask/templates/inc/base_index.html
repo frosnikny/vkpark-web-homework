@@ -1,0 +1,11 @@
+{% extends 'inc/base.html' %}
+
+{% block content %}
+    {% block content-index %}{% endblock %}
+
+    {% for question in questions %}
+        {% include 'inc/question_item.html' with question_type="question" %}
+    {% endfor %}
+
+    {% include 'inc/pagination.html' %}
+{% endblock %}

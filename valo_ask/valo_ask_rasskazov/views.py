@@ -14,9 +14,12 @@ def paginate(objects_list, request, per_page=10):
 
 
 def index(request):
-    page_obj = paginate(models.QUESTIONS, request, 5)
+    questions = models.Question.objects.with_new()
+    # questions = list(models.Question.objects.all())
+    # questions.reverse()
+    page_obj = paginate(questions, request, 5)
     context = {
-        'questions': models.QUESTIONS[page_obj.start_index() - 1: page_obj.end_index()],
+        'questions': questions[page_obj.start_index() - 1: page_obj.end_index()],
         'new_questions': "new_questions",
         'page_obj': page_obj,
     }
@@ -24,8 +27,9 @@ def index(request):
 
 
 def hot(request):
-    hot_questions = [i for i in models.QUESTIONS if i['id'] in models.TOP]
+    hot_questions = models.Question.objects.with_rating_order()
     page_obj = paginate(hot_questions, request, 5)
+
     context = {
         'questions': hot_questions[page_obj.start_index() - 1: page_obj.end_index()],
         'page_obj': page_obj,
@@ -34,7 +38,7 @@ def hot(request):
 
 
 def index_tag(request, tag):
-    tag_questions = [x for x in models.QUESTIONS if tag in x['tags']]
+    tag_questions = models.Question.objects.with_tag(tag)
     page_obj = paginate(tag_questions, request, 5)
     context = {
         'questions': tag_questions[page_obj.start_index() - 1: page_obj.end_index()],
